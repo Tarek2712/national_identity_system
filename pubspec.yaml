@@ -1,0 +1,44 @@
+name: national_identity_system
+description: "Egyptian National Unified System for Identity and Genetic Medical Records"
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # ===== الإضافات الخاصة بالمنظومة =====
+
+  # 1. لدعم اللغة العربية
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+
+  # 2. لربط قاعدة بيانات Supabase
+  supabase_flutter: ^2.6.0
+
+  # 3. أدوات الكلين أركيتكشر وإدارة الحالة (Cubit)
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.7
+  get_it: ^7.7.0
+  dartz: ^0.10.1
+
+  # 4. الخطوط (خط Cairo) والبصمة والـ QR Code
+  google_fonts: ^6.2.1
+  qr_flutter: ^4.1.0
+  local_auth: ^2.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
