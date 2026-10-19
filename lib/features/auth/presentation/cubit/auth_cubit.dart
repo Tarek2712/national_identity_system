@@ -1,33 +1,60 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/repositories/auth_repository.dart';
-import 'auth_state.dart';
+﻿import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+abstract class AuthState {}
+class AuthInitial extends AuthState {}
+class AuthLoading extends AuthState {}
+class AuthSuccess extends AuthState {
+  final String role;
+  final String department;
+  AuthSuccess({required this.role, required this.department});
+}
+class AuthFailure extends AuthState {
+  final String message;
+  AuthFailure(this.message);
+}
 
 class AuthCubit extends Cubit<AuthState> {
-  final AuthRepository authRepository;
+  AuthCubit() : super(AuthInitial());
+  final _supabase = Supabase.instance.client;
 
-  AuthCubit({required this.authRepository}) : super(AuthInitial());
-
-  Future<void> loginWithCredentials({
-    required String nationalId,
-    required String password,
-  }) async {
+  Future<void> login(String email, String password) async {
     emit(AuthLoading());
     try {
-      if (nationalId.isEmpty || password.isEmpty) {
-        emit(const AuthError('يرجى إدخال جميع البيانات'));
+      // 1. تسجيل الدخول عبر نظام Supabase Auth المركزي والمشفر
+      final response = await _supabase.auth.signInWithPassword(email: email, password: password);
+      
+      if (response.user == null) {
+        emit(AuthFailure('فشل تسجيل الدخول. تأكد من البيانات.'));
         return;
       }
 
-      final citizen = await authRepository.loginWithCredentials(nationalId, password);
-      emit(AuthAuthenticated(citizen));
+      // 2. جلب بيانات الموظف لمعرفة قطاعه ورتبته للتوجيه الذكي
+      final staffData = await _supabase
+          .from('staff_accounts')
+          .select('role, department')
+          .eq('auth_id', response.user!.id)
+          .maybeSingle();
+
+      if (staffData == null) {
+        emit(AuthFailure('هذا الحساب غير مسجل كموظف في النظام.'));
+        return;
+      }
+
+      final role = staffData['role'] as String? ?? 'employee';
+      final department = staffData['department'] as String? ?? 'civil';
+
+      emit(AuthSuccess(role: role, department: department));
+
+    } on AuthException catch (e) {
+      emit(AuthFailure('بيانات الدخول غير صحيحة.'));
     } catch (e) {
-      emit(AuthError(e.toString().replaceAll('Exception: ', '')));
+      emit(AuthFailure('حدث خطأ غير متوقع أثناء الاتصال بالخادم.'));
     }
   }
 
-  Future<void> loginWithFaceId() async {
-    emit(AuthLoading());
-    await Future.delayed(const Duration(seconds: 1));
-    emit(const AuthError('لم يتم إعداد البصمة البيومترية لهذا الحساب بعد'));
+  Future<void> logout() async {
+    await _supabase.auth.signOut();
+    emit(AuthInitial());
   }
 }

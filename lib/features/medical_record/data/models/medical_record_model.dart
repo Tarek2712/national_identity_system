@@ -10,18 +10,14 @@ class MedicalRecordModel extends MedicalRecordEntity {
     required super.lastCheckupDate,
   });
 
-  // الدالة دي اتعدلت عشان تطابق أسماء الأعمدة اللي عندك في سوبابيز
   factory MedicalRecordModel.fromJson(Map<String, dynamic> json) {
     return MedicalRecordModel(
-      recordId: json['id'] ?? '', // متسمي عندك id
-      nationalId: json['citizen_id'] ?? '', // متسمي عندك citizen_id
-
-      // لأن الداتا عندك متسجلة كـ text، لو فيها كذا مرض هنفصلهم بفاصلة ونحولهم لـ List
-      geneticConditions: (json['genetic_risks'] as String?)?.split(',') ?? [],
-      chronicDiseases: (json['chronic_diseases'] as String?)?.split(',') ?? [],
-      allergies: (json['allergies'] as String?)?.split(',') ?? [],
-
-      lastCheckupDate: json['updated_at'] ?? '', // متسمي عندك updated_at
+      recordId: json['id']?.toString() ?? '',
+      nationalId: json['citizen_id']?.toString() ?? '',
+      geneticConditions: [json['genetic_risks']?.toString() ?? 'لا يوجد سجل وراثي'],
+      chronicDiseases: [json['chronic_diseases']?.toString() ?? 'لا يوجد'],
+      allergies: [json['allergies']?.toString() ?? 'لا يوجد'],
+      lastCheckupDate: json['updated_at']?.toString() ?? 'غير محدد',
     );
   }
 }

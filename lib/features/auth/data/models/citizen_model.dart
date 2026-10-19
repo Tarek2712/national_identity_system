@@ -1,4 +1,4 @@
-import '../../domain/entities/citizen_entity.dart';
+﻿import '../../domain/entities/citizen_entity.dart';
 
 class CitizenModel extends CitizenEntity {
   const CitizenModel({
@@ -8,6 +8,7 @@ class CitizenModel extends CitizenEntity {
     required super.smartAltId,
     required super.bloodType,
     required super.status,
+    required super.role, // تمرير المتغير الجديد
   });
 
   factory CitizenModel.fromJson(Map<String, dynamic> json) {
@@ -18,6 +19,7 @@ class CitizenModel extends CitizenEntity {
       smartAltId: json['smart_alt_id'] ?? '',
       bloodType: json['blood_type'] ?? '',
       status: json['status'] ?? '',
+      role: json['role'] ?? 'citizen', // قراءة الـ role، وافتراض إنه مواطن لو ملقاهوش
     );
   }
 }

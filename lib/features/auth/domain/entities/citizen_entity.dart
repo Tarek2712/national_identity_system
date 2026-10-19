@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+﻿import 'package:equatable/equatable.dart';
 
 class CitizenEntity extends Equatable {
   final String id;
@@ -7,6 +7,7 @@ class CitizenEntity extends Equatable {
   final String fullName;
   final String bloodType;
   final String status;
+  final String role; // المتغير الجديد للصلاحية
 
   const CitizenEntity({
     required this.id,
@@ -15,6 +16,7 @@ class CitizenEntity extends Equatable {
     required this.fullName,
     required this.bloodType,
     required this.status,
+    required this.role, 
   });
 
   @override
@@ -25,5 +27,6 @@ class CitizenEntity extends Equatable {
     fullName,
     bloodType,
     status,
+    role,
   ];
 }

@@ -1,25 +1,28 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; 
+
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/screens/auth_screen.dart';
-import 'injection_container.dart' as di;
+import 'injection_container.dart';
+import 'features/auth/presentation/cubit/auth_cubit.dart'; 
 
-/// Application Entry Point
+import 'core/presentation/screens/splash_screen.dart'; // مسار شاشة التحميل الجديد
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
     url: 'https://kbxhekuvovafweymydjk.supabase.co',
-    anonKey: 'sb_publishable_uLtt3CMshiP7in3gPjJkWw_hrE1vjZb',
+    publishableKey: 'sb_publishable_uLtt3CMshiP7in3gPjJkWw_hrE1vjZb',
   );
 
-  await di.initInjection();
+  await init(); 
 
   runApp(const NationalIdentityApp());
 }
 
-/// Root Application Widget
 class NationalIdentityApp extends StatelessWidget {
   const NationalIdentityApp({super.key});
 
@@ -41,7 +44,8 @@ class NationalIdentityApp extends StatelessWidget {
       ],
       locale: const Locale('ar', 'EG'),
 
-      home: const AuthScreen(),
+      // 👇 التطبيق هيبدأ بشاشة التحميل (البصمة)
+      home: const SplashScreen(),
     );
   }
 }

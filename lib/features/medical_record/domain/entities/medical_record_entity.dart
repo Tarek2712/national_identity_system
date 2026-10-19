@@ -1,12 +1,10 @@
-// lib/features/medical_record/domain/entities/medical_record_entity.dart
-
 class MedicalRecordEntity {
-  final String recordId;        // رقم السجل الطبي
-  final String nationalId;      // الرقم القومي للمواطن المرتبط بالسجل
-  final List<String> geneticConditions; // الأمراض الوراثية أو الاستعداد الجيني
-  final List<String> chronicDiseases;   // الأمراض المزمنة (سكر، ضغط، إلخ)
-  final List<String> allergies;         // الحساسية المفرطة (أدوية، أطعمة)
-  final String lastCheckupDate; // تاريخ آخر فحص أو تحديث للسجل
+  final String recordId;
+  final String nationalId;
+  final List<String> geneticConditions;
+  final List<String> chronicDiseases;
+  final List<String> allergies;
+  final String lastCheckupDate;
 
   MedicalRecordEntity({
     required this.recordId,
@@ -16,6 +14,4 @@ class MedicalRecordEntity {
     required this.allergies,
     required this.lastCheckupDate,
   });
-
-// (اختياري) ممكن نضيف هنا دوال مساعدة لو محتاجين نفلتر أو نتشيك على بيانات معينة جوا الكيان
 }
